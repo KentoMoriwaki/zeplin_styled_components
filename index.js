@@ -1,43 +1,54 @@
 const DEBUG = false;
 
 function layer(context, layer) {
-  const style =
-    layer.textStyles.length === 0 ? null : layer.textStyles[0].textStyle;
+  try {
+    const style =
+      layer.textStyles.length === 0 ? null : layer.textStyles[0].textStyle;
 
-  const styles = [
-    width(layer),
-    height(layer),
-    fontFamily(style),
-    fontSize(style),
-    fontWeight(style),
-    fontStyle(style),
-    fontStretch(style),
-    lineHeight(style),
-    textAlign(style),
-    color(style),
-    border(layer),
-    borderRadius(layer),
-    boxShadow(layer),
-    opacity(layer),
-    backgroundColor(layer)
-  ].filter(Boolean);
+    const styles = [
+      width(layer),
+      height(layer),
+      fontFamily(style),
+      fontSize(style),
+      // fontWeight(style),
+      fontStyle(style),
+      // fontStretch(style),
+      lineHeight(style),
+      textAlign(style),
+      color(style),
+      border(layer),
+      borderRadius(layer),
+      boxShadow(layer),
+      opacity(layer),
+      backgroundColor(layer)
+    ]
+      .reduce(function(acc, styles) {
+        return acc.concat(styles);
+      }, [])
+      .filter(Boolean);
 
-  let language = "javascript";
-  let code = `
+    let language = "javascript";
+    let code = `
 const Component = styled.div\`
   ${styles.join("\n  ")}
 \`;
 `;
 
-  if (DEBUG) {
-    language = "json";
-    code = JSON.stringify({ context, layer });
-  }
+    if (DEBUG) {
+      language = "json";
+      code = JSON.stringify({ context, layer });
+    }
 
-  return {
-    code,
-    language
-  };
+    return {
+      code,
+      language
+    };
+  } catch (e) {
+    return {
+      code: e.message,
+      language: "text"
+    };
+  }
 }
 
 function width(layer) {
@@ -52,7 +63,17 @@ function height(layer) {
 
 function fontFamily(style) {
   if (style == null) return "";
-  return `font-family: ${style.fontFamily};`;
+  let family = style.fontFamily;
+  let weight = null;
+  const matched = family.match(/HiraginoSans-W(\d)/);
+  if (matched) {
+    family = null;
+    weight = parseInt(matched[1], 10) * 100;
+  }
+  return [
+    family && `font-family: ${family};`,
+    weight && `font-weight ${weight};`
+  ];
 }
 
 function fontSize(style) {
