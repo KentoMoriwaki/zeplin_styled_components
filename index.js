@@ -100,8 +100,8 @@ function fontStretch(style) {
 
 function lineHeight(style) {
   if (style == null) return "";
-  const height = style.lineHeight / style.fontSize;
-  return `line-height: ${Math.round(height * 100) / 100};`;
+  const height = Math.round(style.lineHeight / style.fontSize * 100) / 100;
+  return height && !isNaN(height) && `line-height: ${height};`;
 }
 
 function textAlign(style) {
