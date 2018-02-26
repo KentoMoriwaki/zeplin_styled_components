@@ -72,7 +72,7 @@ function fontFamily(style) {
   }
   return [
     family && `font-family: ${family};`,
-    weight ? `font-weight ${weight};` : fontWeight(style)
+    weight ? `font-weight: ${weight};` : fontWeight(style)
   ];
 }
 
@@ -133,7 +133,7 @@ function border(layer) {
 function borderRadius(layer) {
   return layer.borderRadius === 0
     ? ""
-    : `border-radius: ${layer.borderRadius};`;
+    : `border-radius: ${layer.borderRadius}px;`;
 }
 
 function boxShadow(layer) {
