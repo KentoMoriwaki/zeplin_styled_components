@@ -72,7 +72,7 @@ function fontFamily(style) {
   }
   return [
     family && `font-family: ${family};`,
-    weight ? `font-weight ${weight};` : fontWeight(style)
+    weight ? `font-weight: ${weight};` : fontWeight(style)
   ];
 }
 
